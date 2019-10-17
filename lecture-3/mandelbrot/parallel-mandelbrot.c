@@ -24,7 +24,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <omp.h>
 
 #include "bmp.h"
 
@@ -117,7 +116,7 @@ RGBTRIPLE** create_image() {
     // dynamic scheduling is good if the load isn't well-balanced
     // if static scheduling may ensure an acceptable load balancing, then
     // the dynamic variant may introduce unnecessary overhead
-    # pragma omp parallel for private(x,y,color) schedule(dynamic)    
+    #pragma omp parallel for private(x,y,color) schedule(dynamic)    
 
     // set pixels
     for (int i = 0; i < numCols; i++) {
