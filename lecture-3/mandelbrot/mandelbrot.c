@@ -10,11 +10,17 @@
  * computing the Mandelbrot set from Wikipedia
  * (http://en.wikipedia.org/wiki/Mandelbrot_set).
  *
- * NOTE: this is a refactored version that avoids having everything inside 
- * the main() method. This aids clarity and is easier to explain what is
- * going on to students. The dimensions of the image are parameterized 
- * (you can pass two additional command line arguments x and y after the 
- * file name).
+ * NOTE: implementation of the parallel version using OpenMP. Always set
+ * in advance the OMP_NUM_THREADS environment variable to the number of threads.
+ * Also, try setting the dimensions to 1200 x 12000 to better observe the difference
+ * between the sequential and parallel versions. With 8 threads the speedup is
+ * already remarkable. Of course, this same code base can be treated as a
+ * sequential program if compiled without OpenMP support.
+ *
+ * To build this code using OpenMP on macOS High Sierra follow the instructions
+ * at https://iscinumpy.gitlab.io/post/omp-on-high-sierra/ Provided that libomp
+ * is already installed just execute the next command:
+ * clang -Xpreprocessor -fopenmp -lomp -o mandelbrot mandelbrot.c
  ***************************************************************************/
 
 #include <stdio.h>
@@ -101,17 +107,25 @@ int save_image(char* filename, RGBTRIPLE** pixels) {
 
 RGBTRIPLE** create_image() {
     // create array of pixels to store image
-    pixels = malloc(numCols*sizeof(RGBTRIPLE*));
+    pixels = malloc(numCols * sizeof(RGBTRIPLE*));
     for(int i = 0; i < numCols; i++)
         pixels[i] = malloc(numRows * sizeof(RGBTRIPLE));
+
+    double x, y;
+    enum Color color;
+
+    // dynamic scheduling is good if the load isn't well-balanced
+    // if static scheduling may ensure an acceptable load balancing, then
+    // the dynamic variant may introduce unnecessary overhead
+    #pragma omp parallel for private(x,y,color) schedule(dynamic)    
 
     // set pixels
     for (int i = 0; i < numCols; i++) {
         for (int j = 0; j < numRows; j++) {
-            double x = ((double)i / numCols -0.5) * 2;
-            double y = ((double)j / numRows -0.5) * 2;
+            x = ((double)i / numCols -0.5) * 2;
+            y = ((double)j / numRows -0.5) * 2;
 
-            int color = mandelbrot(x,y);
+            color = mandelbrot(x,y);
 
             pixels[i][j].rgbtBlue = color;
             pixels[i][j].rgbtGreen = color;
