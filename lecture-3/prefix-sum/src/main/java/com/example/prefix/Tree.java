@@ -1,7 +1,7 @@
 package com.example.prefix;
 
 // The binary tree used for computing the prefix sum.
-class Tree {
+final class Tree {
     // Node that stores the range [i, j), sum over this range, and left side sum (leftFrom field) fields.
     static class Node {
         final int[] r;
@@ -71,5 +71,9 @@ class Tree {
     boolean isLeafIndex(int i) {
         checkIndex(i);
         return i >= nodes.length / 2;
+    }
+
+    int getNumLeaves() {
+        return (getSize() + 1) / 2;
     }
 }

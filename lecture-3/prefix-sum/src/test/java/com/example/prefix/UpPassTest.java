@@ -16,13 +16,13 @@ public class UpPassTest extends CommonSetup {
 
     @Test
     public void treeIsProperlyBuiltWithCutoffEqualOrLargerThanInputSize() {
-        UpPass up = new UpPass(referenceInput, referenceInput.length);
+        UpPass up = new UpPass(referenceInput, 500);
         Tree tree = up.buildTree();
         assertNotNull(tree);
 
         Tree.Node node = tree.getNode(0);
-        assertArrayEquals(node.r, new int[] {0, referenceInput.length});
-        assertEquals(60, node.s);
+        assertArrayEquals(node.r, new int[] {0, tree.getNumLeaves() * 500});
+        assertEquals(75, node.s);
         assertEquals(0, node.leftFrom.longValue());
     }
 
@@ -33,23 +33,23 @@ public class UpPassTest extends CommonSetup {
         assertNotNull(tree);
 
         Tree.Node node = tree.getNode(0);
-        assertArrayEquals(node.r, new int[] {0, referenceInput.length});
-        assertEquals(60, node.s);
+        assertArrayEquals(node.r, new int[] {0, tree.getNumLeaves()});
+        assertEquals(75, node.s);
         assertEquals(0, node.leftFrom.longValue());
 
         node = tree.getNode(1);
-        assertArrayEquals(node.r, new int[] {0, 4});
-        assertEquals(36, node.s);
+        assertArrayEquals(node.r, new int[] {0, 8});
+        assertEquals(60, node.s);
         assertEquals(0, node.leftFrom.longValue());
 
         node = tree.getNode(5);
-        assertArrayEquals(node.r, new int[] {4, 6});
-        assertEquals(30, node.s);
+        assertArrayEquals(node.r, new int[] {8, 12});
+        assertEquals(15, node.s);
         assertEquals(0, node.leftFrom.longValue());
 
         node = tree.getNode(9);
-        assertArrayEquals(node.r, new int[] {2, 3});
-        assertEquals(16, node.s);
+        assertArrayEquals(node.r, new int[] {4, 6});
+        assertEquals(30, node.s);
         assertEquals(0, node.leftFrom.longValue());
     }
 }

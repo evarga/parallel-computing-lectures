@@ -26,15 +26,17 @@ class DownPass {
             this.nodeIndex = nodeIndex;
         }
 
-        // This method puts final output values at corresponding indices.
+        // This method puts final output values at corresponding indices. The function checks the bounds due to
+        // potential expansions of leaves.
         private void processLeaves(int low, int high, long prevSum) {
             log.entering(DownPass.class.getName(), "processLeaves", new Object[] {low, high, prevSum});
 
-            for (int i = low; i < high; i++) {
-                long currSum = prevSum + input[i];
-                output[i] = currSum;
-                prevSum = currSum;
-            }
+            if (low < output.length)
+                for (int i = low; i < Math.min(high, output.length); i++) {
+                    long currSum = prevSum + input[i];
+                    output[i] = currSum;
+                    prevSum = currSum;
+                }
         }
 
         @Override

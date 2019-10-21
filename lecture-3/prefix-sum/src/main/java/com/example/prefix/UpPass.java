@@ -19,14 +19,18 @@ class UpPass {
         tree = new Tree(input.length, sequentialCutoff);
     }
 
-    // Calculates the sum of input array elements in the range [i, j).
+    // Calculates the sum of input array elements in the range [i, j). The function checks the bounds due to
+    // potential expansions of leaves.
     long rangeSum(int i, int j) {
         log.entering(UpPass.class.getName(), "rangeSum", new Object[] {i, j});
-        assert i >= 0 && i < j && j <= input.length;
+        assert i >= 0 && i < j && j <= tree.getNumLeaves() * sequentialCutoff;
 
-        long s = input[i];
-        for (int k = i + 1; k < j; k++)
-            s += input[k];
+        long s = 0;
+        if (i < input.length) {
+            s = input[i];
+            for (int k = i + 1; k < Math.min(j, input.length); k++)
+                s += input[k];
+        }
 
         log.exiting(UpPass.class.getName(), "rangeSum", Long.valueOf(s));
         return s;
@@ -68,7 +72,7 @@ class UpPass {
     }
 
     Tree buildTree() {
-        ForkJoinPool.commonPool().invoke(new TreeBuilder(0, 0, input.length));
+        ForkJoinPool.commonPool().invoke(new TreeBuilder(0, 0, tree.getNumLeaves() * sequentialCutoff));
         return tree;
     }
 }

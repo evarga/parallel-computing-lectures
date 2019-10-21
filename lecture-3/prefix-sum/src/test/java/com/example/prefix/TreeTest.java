@@ -41,6 +41,12 @@ public class TreeTest extends CommonSetup {
     }
 
     @Test
+    public void numberOfLeavesIsCorrectlyReturned() {
+        Tree tree = new Tree(7, 1);
+        assertEquals(8, tree.getNumLeaves());
+    }
+
+    @Test
     public void nodeCanPrettyPrintIntoString() {
         Tree.Node node = new Tree.Node(3, 7, 23);
         node.leftFrom = Long.valueOf(8);
