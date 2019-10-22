@@ -34,8 +34,8 @@ final class Tree {
     Tree(int inputSize, int sequentialCutoff) {
         assert inputSize > 0 && sequentialCutoff > 0;
 
-        int numLeafs = (int) Math.ceil((float) inputSize / sequentialCutoff);
-        int treeSize = 2 * roundToNearestPowerOfTwo(numLeafs) - 1;
+        int numLeaves = (int) Math.ceil((float) inputSize / sequentialCutoff);
+        int treeSize = 2 * roundToNearestPowerOfTwo(numLeaves) - 1;
         nodes = new Node[treeSize];
     }
 

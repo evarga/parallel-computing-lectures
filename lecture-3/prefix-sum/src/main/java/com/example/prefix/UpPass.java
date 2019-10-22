@@ -52,9 +52,9 @@ class UpPass {
             log.entering(UpPass.class.getName(), "compute", new Object[] {nodeIndex, low, high});
 
             long totalSum;
-            if (high - low <= sequentialCutoff) {
+            if (high - low <= sequentialCutoff)
                 totalSum = rangeSum(low, high);
-            } else {
+            else {
                 int mid = low + (high - low) / 2;
                 TreeBuilder left  = new TreeBuilder(tree.getLeftChildIndex(nodeIndex), low, mid);
                 TreeBuilder right = new TreeBuilder(tree.getRightChildIndex(nodeIndex), mid, high);
