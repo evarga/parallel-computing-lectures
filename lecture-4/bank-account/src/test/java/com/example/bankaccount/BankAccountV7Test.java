@@ -12,17 +12,9 @@ public class BankAccountV7Test extends BankAccountTestBase<BankAccountV7> {
 
     @Test
     public void waitInWithdrawUntilEnoughMoneyIsAvailable() throws InterruptedException {
-        final BankAccountV7 bankAccount = new BankAccountV7();
         bankAccount.setBalance(50);
 
-        final Runnable withdrawLogic = new Runnable() {
-            @Override
-            public void run() {
-                bankAccount.withdraw(100);
-            }
-        };
-
-        final Thread withdrawAgent = new Thread(withdrawLogic);
+        final Thread withdrawAgent = new Thread(businessLogic);
         withdrawAgent.start();
         // Let the thread doing the withdraw get stuck.
         Thread.sleep(100);
