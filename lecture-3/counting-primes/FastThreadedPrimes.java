@@ -11,12 +11,12 @@ import java.util.ArrayList;
 
 public class FastThreadedPrimes {
     private static final long DEFAULT_UPPER_BOUND = 8000000L;
-    static int sharedPCount;
-    static Object lock = new Object();
+    private static int sharedPCount;
+    private static final Object lock = new Object();
 
     static class PrimeFinder implements Runnable {
-        long from;
-        long to;
+        private final long from;
+        private final long to;
         int localPCount;
 
         public PrimeFinder(long from, long to) {

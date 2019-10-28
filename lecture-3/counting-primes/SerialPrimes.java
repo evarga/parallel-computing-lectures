@@ -12,7 +12,7 @@ public class SerialPrimes {
     public static boolean isPrime(long num) {
         int limit = (int) Math.sqrt(num);
 
-        for (long i = 3; i <= limit; i++) {
+        for (long i = 3; i <= limit; i += 2) {
             if (num % i == 0)
                 return false;
         }

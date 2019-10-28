@@ -13,7 +13,7 @@
 
 public class ThreadedPrimesWrongV2 {
     private static final long DEFAULT_UPPER_BOUND = 8000000L;
-    public static int pCount;
+    private static int pCount;
 
     static class PrimeFinder implements Runnable {
         private long from;
@@ -37,10 +37,12 @@ public class ThreadedPrimesWrongV2 {
     }
 
     public static boolean isPrime(long num) {
-        int limit = (int) Math.sqrt(num);
+        if (num % 2 == 0)
+            return false;
 
-        for (long i = 2; i <= limit; i++) {
-            if(num % i == 0)
+        int limit = (int) Math.sqrt(num);
+        for (long i = 3; i <= limit; i += 2) {
+            if (num % i == 0)
                 return false;
         }
         return true;
