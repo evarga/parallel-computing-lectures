@@ -6,18 +6,20 @@ final class Tree {
     static class Node {
         final int[] r;
         final long s;
-        Long leftFrom;
+        // For prefix sum this field is equivalent to fromLeft and for suffix sum to fromRight.
+        // When code is properly structured then the opportunity for reuse increases, too.
+        Long fromSiblingBranch;
 
         Node(int i, int j, long s) {
             assert i >= 0 && i < j;
             r = new int[] {i, j};
             this.s = s;
-            leftFrom = Long.valueOf(0);
+            fromSiblingBranch = Long.valueOf(0);
         }
 
         @Override
         public String toString() {
-            return String.format("Node(low=%d,high=%d,s=%d,leftFrom=%d)", r[0], r[1], s, leftFrom);
+            return String.format("Node(low=%d,high=%d,s=%d,leftFrom=%d)", r[0], r[1], s, fromSiblingBranch);
         }
     };
 

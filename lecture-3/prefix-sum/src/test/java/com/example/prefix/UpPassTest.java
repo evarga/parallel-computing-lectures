@@ -23,7 +23,7 @@ public class UpPassTest extends CommonSetup {
         Tree.Node node = tree.getNode(0);
         assertArrayEquals(node.r, new int[] {0, tree.getNumLeaves() * 500});
         assertEquals(75, node.s);
-        assertEquals(0, node.leftFrom.longValue());
+        assertEquals(0, node.fromSiblingBranch.longValue());
     }
 
     @Test
@@ -35,21 +35,21 @@ public class UpPassTest extends CommonSetup {
         Tree.Node node = tree.getNode(0);
         assertArrayEquals(node.r, new int[] {0, tree.getNumLeaves()});
         assertEquals(75, node.s);
-        assertEquals(0, node.leftFrom.longValue());
+        assertEquals(0, node.fromSiblingBranch.longValue());
 
         node = tree.getNode(1);
         assertArrayEquals(node.r, new int[] {0, 8});
         assertEquals(60, node.s);
-        assertEquals(0, node.leftFrom.longValue());
+        assertEquals(0, node.fromSiblingBranch.longValue());
 
         node = tree.getNode(5);
         assertArrayEquals(node.r, new int[] {8, 12});
         assertEquals(15, node.s);
-        assertEquals(0, node.leftFrom.longValue());
+        assertEquals(0, node.fromSiblingBranch.longValue());
 
         node = tree.getNode(9);
         assertArrayEquals(node.r, new int[] {4, 6});
         assertEquals(30, node.s);
-        assertEquals(0, node.leftFrom.longValue());
+        assertEquals(0, node.fromSiblingBranch.longValue());
     }
 }

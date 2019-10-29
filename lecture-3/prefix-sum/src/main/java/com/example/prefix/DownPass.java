@@ -45,15 +45,15 @@ class DownPass {
             log.fine("Processing node " + node);
 
             if (tree.isLeafIndex(nodeIndex))
-                processLeaves(node.r[0], node.r[1], node.leftFrom);
+                processLeaves(node.r[0], node.r[1], node.fromSiblingBranch);
             else {
                 int leftChildIndex = tree.getLeftChildIndex(nodeIndex);
                 int rightChildIndex = tree.getRightChildIndex(nodeIndex);
                 Tree.Node leftChild = tree.getNode(leftChildIndex);
                 Tree.Node rightChild = tree.getNode(rightChildIndex);
 
-                leftChild.leftFrom = node.leftFrom;
-                rightChild.leftFrom = node.leftFrom + leftChild.s;
+                leftChild.fromSiblingBranch = node.fromSiblingBranch;
+                rightChild.fromSiblingBranch = node.fromSiblingBranch + leftChild.s;
 
                 OutputBuilder left = new OutputBuilder(leftChildIndex);
                 OutputBuilder right = new OutputBuilder(rightChildIndex);
