@@ -27,7 +27,7 @@ public class BankAccountV7Test extends BankAccountTestBase<BankAccountV7> {
         assertEquals(0, bankAccount.getBalance());
     }
 
-    @Test
+    @Test @Ignore
     @Override
     public void repeatedlyWithdrawMoneySequentially() {
         // This test makes no sense for our new class, so do nothing here.

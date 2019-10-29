@@ -7,7 +7,7 @@ import static org.junit.Assert.assertEquals;
 public class BankAccountV6Test {
     @Test(timeout = 6000)
     public void readBalancesInParallelWhileWithdrawExclusively() throws InterruptedException {
-        // This test will fail (time out) with ordinary locks. The test would surely need at least 12 seconds.
+        // This test will fail (time out) with ordinary locks; we would surely need at least 12 seconds.
         final BankAccount bankAccount = new BankAccountV6();
         bankAccount.setBalance(150);
 
@@ -34,8 +34,8 @@ public class BankAccountV6Test {
             readers[i].start();
         }
 
-        for (int i = 0; i < readers.length; i++)
-            readers[i].join();
+        for (Thread reader: readers)
+            reader.join();
         writer.join();
         assertEquals(50, bankAccount.getBalance());
     }
