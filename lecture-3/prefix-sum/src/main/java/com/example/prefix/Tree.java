@@ -1,8 +1,8 @@
 package com.example.prefix;
 
-// The binary tree used for computing the prefix sum.
+// The binary tree used for computing the prefix/suffix sum.
 final class Tree {
-    // Node that stores the range [i, j), sum over this range, and left side sum (leftFrom field) fields.
+    // Node that stores the range [i, j), sum over this range, and sibling side sum (fromSiblingBranch field) fields.
     static class Node {
         final int[] r;
         final long s;

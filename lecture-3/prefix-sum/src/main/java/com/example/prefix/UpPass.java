@@ -4,7 +4,7 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
 import java.util.logging.Logger;
 
-// Implements the first pass of the parallel Prefix Sum algorithm.
+// Implements the first pass of the parallel Prefix/Suffix Sum algorithm.
 class UpPass {
     private static final Logger log = Logger.getLogger(UpPass.class.getName());
 
