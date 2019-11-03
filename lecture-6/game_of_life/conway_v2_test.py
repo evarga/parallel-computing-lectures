@@ -12,6 +12,7 @@ class ConwayV2TestCase(ConwayBaseTestCase):
         args.j = 1
         args.config_filename = 'patterns/exercise1.cells'
         self._game = ConwayV2(args)
+        self._game.create_buffers()
 
 if __name__ == '__main__':
     unittest.main()

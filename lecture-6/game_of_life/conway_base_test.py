@@ -12,6 +12,7 @@ class ConwayBaseTestCase(unittest.TestCase):
         args.j = 1
         args.config_filename = 'patterns/exercise1.cells'
         self._game = ConwayBase(args)
+        self._game.create_buffers()
 
     def test_board_is_properly_loaded(self):
         expected_board = np.full((11, 11), Cell.DEAD)

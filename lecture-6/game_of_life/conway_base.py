@@ -47,11 +47,13 @@ class ConwayBase():
                 j = self._start_pos_x
 
     def simulate(self):
+        self.create_buffers()
+
         fig, self._ax = plt.subplots()
         self._ax.axis('off')
         ani = animation.FuncAnimation(fig,
                                       self._next_generation,
-                                      init_func=self.init,
+                                      init_func=self._init_animation,
                                       interval=self._interval,
                                       blit=True,
                                       save_count=100)
@@ -67,7 +69,7 @@ class ConwayBase():
         # Slicing a NumPy array returns its view instead of a copy as with ordinary Python lists.
         return self._board[1:(self._n + 1), 1:(self._n + 1)]
 
-    def init(self):
+    def _init_animation(self):
         self._img = self._ax.imshow(self._get_unpadded_board(), interpolation='nearest')
         return self._img,
 
@@ -80,13 +82,18 @@ class ConwayBase():
         self._img.set_data(self._get_unpadded_board())
         return self._img,
 
+    def create_buffers(self):
+        """This method should create auxiliary buffers to be used by the prepare_next_board method."""
+
+        self._next_board = np.empty(self._board.shape, self._board.dtype)
+
     def prepare_next_board(self):
         """
         Prepares the padded board in-place to reflect the next generation of cells. 
-        This method is supposed to be overridden by child classes.
+        This method is supposed to be overridden by child classes together with create_buffers.
         """
 
-        next_board = self._board.copy()
+        self._next_board[:, :] = self._board
         for i in range(1, self._n + 1):
             for j in range(1, self._n + 1):
                 num_live_neighbors = self._board[i, j - 1] + self._board[i, j + 1] + \
@@ -96,11 +103,11 @@ class ConwayBase():
 
                 if self._board[i, j] == Cell.LIVE:
                     if num_live_neighbors < 2 or num_live_neighbors > 3:
-                        next_board[i, j] = Cell.DEAD
+                        self._next_board[i, j] = Cell.DEAD
                 else:
                     if num_live_neighbors == 3:
-                        next_board[i, j] = Cell.LIVE
-        self._board = next_board
+                        self._next_board[i, j] = Cell.LIVE
+        self._board[:, :] = self._next_board
 
     @staticmethod
     def parse_command_line_args():
