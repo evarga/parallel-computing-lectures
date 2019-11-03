@@ -5,6 +5,7 @@ from conway_base import Cell, ConwayBase
 
 class ConwayV2(ConwayBase):
     def create_buffers(self):
+        self._board = np.pad(self._board, 1, 'constant')
         self._row_upper = np.empty(self._board.shape[1], self._board.dtype)
         self._row_central = np.empty(self._board.shape[1], self._board.dtype)
         self._row_lower = np.empty(self._board.shape[1], self._board.dtype)
@@ -31,6 +32,7 @@ class ConwayV2(ConwayBase):
             self._row_central[:] = self._row_lower
             if i < self._n:
                 self._row_lower[:] = self._board[i + 2]
+        return self._get_real_board()
 
 if __name__ == '__main__':
     game = ConwayV2(ConwayV2.parse_command_line_args())

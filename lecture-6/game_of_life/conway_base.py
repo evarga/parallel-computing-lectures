@@ -23,8 +23,7 @@ class Cell(IntEnum):
 class ConwayBase():
     def __init__(self, args):
         self._n = args.n
-        # We automatically add padding here on all sides of the board.
-        self._board = np.zeros((self._n + 2, self._n + 2), dtype = np.int)
+        self._board = np.zeros((self._n, self._n), dtype = np.int)
         self._interval = args.interval
         self._movie_filename = args.movie_filename
         self._start_pos_y = args.i
@@ -47,7 +46,7 @@ class ConwayBase():
                 j = self._start_pos_x
 
     def simulate(self):
-        self.create_buffers()
+        self._create_buffers()
 
         fig, self._ax = plt.subplots()
         self._ax.axis('off')
@@ -65,12 +64,8 @@ class ConwayBase():
 
         plt.show()
 
-    def _get_unpadded_board(self):
-        # Slicing a NumPy array returns its view instead of a copy as with ordinary Python lists.
-        return self._board[1:(self._n + 1), 1:(self._n + 1)]
-
     def _init_animation(self):
-        self._img = self._ax.imshow(self._get_unpadded_board(), interpolation='nearest')
+        self._img = self._ax.imshow(self._get_real_board(), interpolation='nearest')
         return self._img,
 
     def _next_generation(self, frame):
@@ -78,16 +73,21 @@ class ConwayBase():
         if frame == 0:
             return self._img,
 
-        self.prepare_next_board()
-        self._img.set_data(self._get_unpadded_board())
+        self._img.set_data(self._prepare_next_board())
         return self._img,
 
-    def create_buffers(self):
-        """This method should create auxiliary buffers to be used by the prepare_next_board method."""
+    def _get_real_board(self):
+        """Retrieves the real board as a NumPy array (without any extras added)."""
 
+        return self._board[1:(self._n + 1), 1:(self._n + 1)]        
+
+    def _create_buffers(self):
+        """This method should create necessary buffers to be used by the prepare_next_board method."""
+
+        self._board = np.pad(self._board, 1, 'constant')
         self._next_board = np.empty(self._board.shape, self._board.dtype)
 
-    def prepare_next_board(self):
+    def _prepare_next_board(self):
         """
         Prepares the padded board in-place to reflect the next generation of cells. 
         This method is supposed to be overridden by child classes together with create_buffers.
@@ -108,6 +108,7 @@ class ConwayBase():
                     if num_live_neighbors == 3:
                         self._next_board[i, j] = Cell.LIVE
         self._board[:, :] = self._next_board
+        return self._get_real_board()
 
     @staticmethod
     def parse_command_line_args():
@@ -136,7 +137,7 @@ class ConwayBase():
             dest='n',
             metavar='N',
             default=50,
-            help='The size of the square board in number of cells. The upper left corner has coordinates (1, 1).')
+            help='The size of the square board in number of cells. The upper left corner has coordinates (0, 0).')
         parser.add_argument(
             '--movie', 
             metavar='filename',
