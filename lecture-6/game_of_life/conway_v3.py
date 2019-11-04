@@ -15,8 +15,8 @@ from conway_base import Cell, ConwayBase
 class ConwayV3(ConwayBase):
     def _create_buffers(self):
         self._board = da.from_array(self._board, chunks=(50, 50))
-        self._kernel = np.ones((3, 3))
-        self._kernel[1, 1] = 0
+        self._mask = np.ones((3, 3))
+        self._mask[1, 1] = 0
 
     def _process_cell(self, block, block_id=None):
         rows, cols = block.shape
@@ -33,7 +33,7 @@ class ConwayV3(ConwayBase):
 
     def _prepare_next_board(self):
         num_live_neighbors = self._board.map_overlap(convolve, depth=1, boundary='none', 
-                                                     weights=self._kernel, mode='constant', cval=0)
+                                                     weights=self._mask, mode='constant', cval=0)
         next_board = num_live_neighbors.map_blocks(self._process_cell, dtype=np.int).compute()
         self._board = da.from_array(next_board, chunks=(50, 50))
         return next_board
