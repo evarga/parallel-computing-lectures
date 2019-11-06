@@ -12,12 +12,11 @@
 public class ThreadedPrimesFixed {
     private static final long DEFAULT_UPPER_BOUND = 8000000L;
     private static int sharedPCount;
-    private static final Object lock = new Object();
+    private static final Object lock = ThreadedPrimesFixed.class;
 
-    static class PrimeFinder implements Runnable {
+    private static class PrimeFinder implements Runnable {
         private final long from;
         private final long to;
-        int localPCount;
 
         public PrimeFinder(long from, long to) {
             this.from = from;
@@ -25,6 +24,7 @@ public class ThreadedPrimesFixed {
         }
 
         public void run() {
+            int localPCount = 0;
             long nextCand = from;
 
             while (nextCand < to) {

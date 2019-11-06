@@ -28,13 +28,11 @@
 
 #include "bmp.h"
 
-
 enum Color { WHITE = 255, BLACK = 0 };
 RGBTRIPLE** pixels;                // 2D array of pixels
 const int DEFAULT_DIMENSION = 800;
 int numRows = DEFAULT_DIMENSION;   // number of rows in image
 int numCols = DEFAULT_DIMENSION;   // number of cols
-
 
 double mandelbrot(double x, double y) {
     int maxIteration = 1000;

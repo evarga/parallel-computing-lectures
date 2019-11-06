@@ -12,12 +12,11 @@ import java.util.ArrayList;
 public class FastThreadedPrimes {
     private static final long DEFAULT_UPPER_BOUND = 8000000L;
     private static int sharedPCount;
-    private static final Object lock = new Object();
+    private static final Object lock = FastThreadedPrimes.class;
 
-    static class PrimeFinder implements Runnable {
+    private static class PrimeFinder implements Runnable {
         private final long from;
         private final long to;
-        int localPCount;
 
         public PrimeFinder(long from, long to) {
             this.from = from;
@@ -25,6 +24,7 @@ public class FastThreadedPrimes {
         }
 
         public void run() {
+            int localPCount = 0;
             long nextCand = from;
 
             while (nextCand < to) {
@@ -34,7 +34,7 @@ public class FastThreadedPrimes {
                 nextCand += 4;
             }
 
-            synchronized (lock) {
+            synchronized(lock) {
                 sharedPCount += localPCount;
             }
         }
@@ -75,7 +75,10 @@ public class FastThreadedPrimes {
             nextCand += 2;
         }
 
-        sharedPCount = primes.size();
+        // Synchronization also serves as a mechanism to update shared memory.
+        synchronized(lock) {
+            sharedPCount = primes.size();
+        }
 
         if (threshold % 2 == 0)
             threshold++;

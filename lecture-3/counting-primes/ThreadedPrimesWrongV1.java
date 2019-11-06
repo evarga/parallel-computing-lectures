@@ -8,7 +8,7 @@ public class ThreadedPrimesWrongV1 {
     private static final long DEFAULT_UPPER_BOUND = 8000000L;
     private static int pCount;
 
-    static class PrimeFinder implements Runnable {
+    private static class PrimeFinder implements Runnable {
         private long from;
         private long to;
 
