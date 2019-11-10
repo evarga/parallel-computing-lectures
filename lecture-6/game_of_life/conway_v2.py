@@ -10,6 +10,20 @@ class ConwayV2(ConwayBase):
         self._row_central = np.empty(self._board.shape[1], self._board.dtype)
         self._row_lower = np.empty(self._board.shape[1], self._board.dtype)
 
+    # Reducing the amount of auxiliary memory may also help a bit to improve speed.
+    # If we would like to apply loop unrolling to speed things up (by calculating
+    # two time steps at once), then we would need a patch of 5x5. The number of
+    # such different patches is 2**25 = 33,554,432. The single time step patch of 3x3
+    # was easy to handle, since all 2**9 possibilities had been expressed via
+    # intuitive rules. This isn't the case with 5x5, though. One way would be to store
+    # all transitions inside a hash map and perform fast lookups.
+    #
+    # HOMEWORK
+    # --------
+    # Apply this preprocessing below for our classical 3x3 patch and observe
+    # the speedup.
+    # 
+    # Hint: https://stackoverflow.com/questions/16589791/most-efficient-property-to-hash-for-numpy-array
     def prepare_next_board(self):
         self._row_upper[:] = self._board[0]
         self._row_central[:] = self._board[1]
