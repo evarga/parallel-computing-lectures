@@ -1,4 +1,7 @@
-"""Variant of the base class using less auxiliary memory for preparing the next board."""
+"""
+Variant of the base class using less auxiliary memory for preparing the next board.
+This approach may improve a bit the performance, too.
+"""
 
 import numpy as np
 from conway_base import Cell, ConwayBase
@@ -10,7 +13,6 @@ class ConwayV2(ConwayBase):
         self._row_central = np.empty(self._board.shape[1], self._board.dtype)
         self._row_lower = np.empty(self._board.shape[1], self._board.dtype)
 
-    # Reducing the amount of auxiliary memory may also help a bit to improve speed.
     # If we would like to apply loop unrolling to speed things up (by calculating
     # two time steps at once), then we would need a patch of 5x5. The number of
     # such different patches is 2**25 = 33,554,432. The single time step patch of 3x3
@@ -20,7 +22,7 @@ class ConwayV2(ConwayBase):
     #
     # HOMEWORK
     # --------
-    # Apply this preprocessing below for our classical 3x3 patch and observe
+    # Apply the above mentioned preprocessing idea for our classical 3x3 patch and observe
     # the speedup.
     # 
     # Hint: https://stackoverflow.com/questions/16589791/most-efficient-property-to-hash-for-numpy-array
