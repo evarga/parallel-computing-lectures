@@ -50,6 +50,6 @@ public class TreeTest extends CommonSetup {
     public void nodeCanPrettyPrintIntoString() {
         Tree.Node node = new Tree.Node(3, 7, 23);
         node.fromSiblingBranch = Long.valueOf(8);
-        assertEquals("Node(low=3,high=7,s=23,leftFrom=8)", node.toString());
+        assertEquals("Node(low=3,high=7,s=23,fromSibling=8)", node.toString());
     }
 }

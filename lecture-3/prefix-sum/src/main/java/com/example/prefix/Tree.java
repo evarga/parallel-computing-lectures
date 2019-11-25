@@ -19,7 +19,7 @@ final class Tree {
 
         @Override
         public String toString() {
-            return String.format("Node(low=%d,high=%d,s=%d,leftFrom=%d)", r[0], r[1], s, fromSiblingBranch);
+            return String.format("Node(low=%d,high=%d,s=%d,fromSibling=%d)", r[0], r[1], s, fromSiblingBranch);
         }
     };
 

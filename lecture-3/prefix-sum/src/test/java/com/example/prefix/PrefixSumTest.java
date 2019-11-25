@@ -28,7 +28,7 @@ public class PrefixSumTest extends CommonSetup {
     }
 
     @Test
-    public void generatePrefixSumWithCutoffSmalledThanInputSize() {
+    public void generatePrefixSumWithCutoffSmallerThanInputSize() {
         long[] newOutput = referenceInput;
         PrefixSum.parallelPrefixSum(referenceInput, referenceInput.length / 2);
         assertArrayEquals(referenceOutput, newOutput);
