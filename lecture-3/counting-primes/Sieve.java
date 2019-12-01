@@ -8,6 +8,7 @@ public class Sieve {
     public Sieve(int n) {
         sieve = new BitSet(n);
         sieve.set(2, n);
+        findPrimes();
     }
 
     public void printPrimes() {
@@ -18,7 +19,7 @@ public class Sieve {
         return sieve.cardinality();
     }
 
-    public void findPrimes() {
+    private void findPrimes() {
         for (int i = 2; i < sieve.length(); i++) {
             if (sieve.get(i)) {
                 for (int j = i + i; j < sieve.length(); j += i) {
@@ -35,7 +36,6 @@ public class Sieve {
             size = Integer.parseInt(args[0]);
 
         Sieve sieve = new Sieve(size);
-        sieve.findPrimes();
         System.out.println("Number of primes = " + sieve.getNumberOfPrimes());
 
         if (size <= 100)
