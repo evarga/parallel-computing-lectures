@@ -58,6 +58,7 @@ def integrate(f, a, b, num_slices):
     # Step 2: setup the pool of processes and handle chunks in parallel.
     pool = Pool(processes=num_cpus)
     subtotals = pool.map(process_chunk, args)
+    pool.close()
 
     # Step 3: merge subtotals into the final result.
     report_result('Parallel',

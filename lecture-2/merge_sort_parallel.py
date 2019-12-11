@@ -69,6 +69,7 @@ def merge_sort_parallel(lst, num_chunks=cpu_count()):
         args = [(sublists[i], sublists[i + 1]) for i in range(0, len(sublists), 2)]
         sublists = pool.map(merge_chunk, args)
 
+    pool.close()
     print('Sorting list of', len(lst), 'elements took', time.time() - start_time, 'seconds.')
     return sublists[0]
 

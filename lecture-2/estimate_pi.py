@@ -36,6 +36,7 @@ def estimate_pi(num_trials):
     # Step 2: setup the pool of processes and handle chunks in parallel.
     pool = Pool(processes=num_cpus)
     subtotals = pool.map(monte_carlo_sim, trials)
+    pool.close()
 
     # Step 3: merge subtotals into the final result.
     report_result('Parallel',
