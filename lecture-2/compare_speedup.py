@@ -1,6 +1,6 @@
 from math import sqrt
 from random import randint
-import time
+from time import perf_counter
 from spawn_processes import spawn_procs, wait_for_all
 
 
@@ -14,14 +14,14 @@ def slow_sum_of_sqrt_random_nums(n):
 def speedup(num_processes, n):
     print("\nCalculating parallel speedup with %d processors for n=%d" % (num_processes, n))
 
-    start_time = time.time()
+    start_time = perf_counter()
     wait_for_all(spawn_procs(num_processes, slow_sum_of_sqrt_random_nums, n // num_processes))
-    elapsed_par_time = time.time() - start_time
+    elapsed_par_time = perf_counter() - start_time
     print('The parallel variant took', elapsed_par_time, 'seconds.')
 
-    start_time = time.time()
+    start_time = perf_counter()
     slow_sum_of_sqrt_random_nums(n)
-    elapsed_seq_time = time.time() - start_time
+    elapsed_seq_time = perf_counter() - start_time
     print('The sequential variant took', elapsed_seq_time, 'seconds.')
 
     print('Speedup is', elapsed_seq_time / elapsed_par_time)

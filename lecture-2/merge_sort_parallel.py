@@ -1,5 +1,6 @@
 from multiprocessing import Pool, cpu_count
-import random, time, sys
+import random, sys
+from time import perf_counter
 # This import is for convenience, but signifies that linspace should probably move into a utility module.
 from integrate import linspace
 
@@ -55,7 +56,7 @@ def merge_sort_parallel(lst, num_chunks=cpu_count()):
     if len(lst) < 2:
         return lst
 
-    start_time = time.time()
+    start_time = perf_counter()
     # Step 1: distribute work among processes into chunks as evenly as possible.
     endpoints = list(map(int, linspace(0, len(lst), num_chunks)))
     args = [lst[endpoints[i]:endpoints[i + 1]] for i in range(num_chunks)]
@@ -70,7 +71,7 @@ def merge_sort_parallel(lst, num_chunks=cpu_count()):
         sublists = pool.map(merge_chunk, args)
 
     pool.close()
-    print('Sorting list of', len(lst), 'elements took', time.time() - start_time, 'seconds.')
+    print('Sorting list of', len(lst), 'elements took', perf_counter() - start_time, 'seconds.')
     return sublists[0]
 
 

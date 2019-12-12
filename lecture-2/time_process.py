@@ -1,4 +1,4 @@
-import time
+from time import perf_counter
 from spawn_processes import spawn_procs, wait_for_all
 
 
@@ -11,9 +11,9 @@ def slow_sum_1_to_n(n):
 
 def time_process(n):
     print('Calculating time for n =', n)
-    start_time = time.time()
+    start_time = perf_counter()
     wait_for_all(spawn_procs(1, slow_sum_1_to_n, n))
-    elapsed_time = time.time() - start_time
+    elapsed_time = perf_counter() - start_time
     print('The process took', elapsed_time, 'seconds.')
 
 

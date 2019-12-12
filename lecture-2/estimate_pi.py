@@ -1,5 +1,6 @@
 from multiprocessing import Pool, cpu_count
-import random, time, sys
+import random, sys
+from time import perf_counter
 
 
 # This method uses the same functional paradigm as Pool/map.
@@ -16,16 +17,16 @@ def estimate_pi(num_trials):
 
         print("\n%s: With %d trials and in %f seconds %s = %f" % (method, 
                                                                 num_trials, 
-                                                                time.time() - start_time, 
+                                                                perf_counter() - start_time, 
                                                                 unicodedata.lookup('GREEK SMALL LETTER PI'), 
                                                                 result))
 
     # The trick below (passing the start time) only works in languages with eager evaluation of parameters.
     report_result('Sequential', 
-                  time.time(), 
+                  perf_counter(), 
                   4 * monte_carlo_sim(num_trials) / num_trials)
 
-    start_time = time.time()
+    start_time = perf_counter()
     # Step 1: distribute work among processes into chunks as evenly as possible.
     num_cpus = cpu_count()
     print('\nNumber of cores =', num_cpus)

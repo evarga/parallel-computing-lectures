@@ -1,5 +1,6 @@
 from multiprocessing import Pool, cpu_count
-import random, time, sys
+import random, sys
+from time import perf_counter
 
 
 def riemann_sum(f, a, b, h):
@@ -34,7 +35,7 @@ def integrate(f, a, b, num_slices):
 
         print("\n%s: With %d slices and in %f seconds %s = %f" % (method, 
                                                                   num_slices, 
-                                                                  time.time() - start_time, 
+                                                                  perf_counter() - start_time, 
                                                                   unicodedata.lookup('INTEGRAL'), 
                                                                   result))
 
@@ -43,10 +44,10 @@ def integrate(f, a, b, num_slices):
 
     # The trick below (passing the start time) only works in languages with eager evaluation of parameters.
     report_result('Sequential', 
-                  time.time(), 
+                  perf_counter(), 
                   riemann_sum(f, a, b, h))
 
-    start_time = time.time()
+    start_time = perf_counter()
     # Step 1: distribute work among processes into chunks as evenly as possible.
     num_cpus = cpu_count()
     print('\nNumber of cores =', num_cpus)
