@@ -36,11 +36,9 @@ public abstract class BankAccountTestBase<T extends BankAccount> {
 
     @Test(expected = InsufficientFundsException.class)
     public void repeatedlyWithdrawMoneySequentially() {
-        for (int i = 0; i < NUM_TRIALS; i++) {
-            bankAccount.setBalance(150);
-            bankAccount.withdraw(100);
-            bankAccount.withdraw(100);
-        }
+        bankAccount.setBalance(150);
+        bankAccount.withdraw(100);
+        bankAccount.withdraw(100);
     }
 
     protected final Runnable businessLogic = new Runnable() {

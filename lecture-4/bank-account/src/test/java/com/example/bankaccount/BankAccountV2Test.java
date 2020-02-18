@@ -10,7 +10,7 @@ public class BankAccountV2Test extends BankAccountTestBase<BankAccountV2> {
     }
 
     @Test
-    public void deadlockWhenWithdrawMoneyInParallel() throws InterruptedException {
+    public void livelockWhenWithdrawMoneyInParallel() throws InterruptedException {
         final Thread t1 = new Thread(businessLogic);
         final Thread t2 = new Thread(businessLogic);
         final Thread t3 = new Thread(businessLogic);
