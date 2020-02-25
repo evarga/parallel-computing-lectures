@@ -1,3 +1,5 @@
+# Idea for this example was based on the LinkedIn course "Python Parallel Programming Solutions" by Giancarlo Zaccone.
+
 from random import randint
 from threading import Condition, RLock, Thread 
 from time import sleep
