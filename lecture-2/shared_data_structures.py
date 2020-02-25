@@ -1,10 +1,11 @@
-from multiprocessing import Queue
+from multiprocessing import Manager, Queue
 from random import randint
 from spawn_processes import spawn_procs, wait_for_all
 
 
 def add_item(ls):
-    # List.append is thread-safe in Python, but here this doesn't apply, as each process works on its own local list.
+    # List.append is thread-safe in Python, but here this doesn't apply directly, 
+    # as each process works on its own local list.
     ls.append(randint(1, 100))
 
 
@@ -36,6 +37,13 @@ def shared_parallel_DS_correct():
     print(ls)
 
 
+def shared_managed_parallel_DS_correct():
+    manager = Manager()
+    ls = manager.list()
+    wait_for_all(spawn_procs(2, add_item, ls))
+    print(ls)
+
+
 if __name__ == '__main__':
     print('Trying to populate the shared list from a sequential program.')
     shared_sequential_DS()
@@ -43,3 +51,5 @@ if __name__ == '__main__':
     shared_parallel_DS_wrong()
     print('\nTrying to populate the shared list from a parallel program (correct way).')
     shared_parallel_DS_correct()
+    print('\nTrying to populate the shared list from a parallel program via the manager (correct way).')
+    shared_managed_parallel_DS_correct()
