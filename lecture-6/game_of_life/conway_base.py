@@ -16,15 +16,19 @@ import numpy as np
 import matplotlib.pyplot as plt 
 import matplotlib.animation as animation
 
+
 class Cell(IntEnum):
     LIVE = 1
     DEAD = 0
 
+
 class ConwayBase():
     def __init__(self, args):
         self._n = args.n
-        self._board = np.zeros((self._n, self._n), dtype = np.int)
+        self.board = np.zeros((self._n, self._n), dtype = np.int)
         self._interval = args.interval
+        self._steps = args.steps
+        self._fowarded = False
         self._movie_filename = args.movie_filename
         self._start_pos_y = args.i
         self._start_pos_x = args.j
@@ -40,13 +44,13 @@ class ConwayBase():
                     continue
                 for sym in line:
                     if sym == 'O':
-                        self._board[i, j] = Cell.LIVE
+                        self.board[i, j] = Cell.LIVE
                     j += 1
                 i += 1
                 j = self._start_pos_x
 
     def simulate(self):
-        self._create_buffers()
+        self.create_buffers()
 
         fig, self._ax = plt.subplots()
         self._ax.axis('off')
@@ -65,7 +69,7 @@ class ConwayBase():
         plt.show()
 
     def _init_animation(self):
-        self._img = self._ax.imshow(self._get_real_board(), interpolation='nearest')
+        self._img = self._ax.imshow(self.get_real_board(), interpolation='nearest')
         return self._img,
 
     def _next_generation(self, frame):
@@ -73,42 +77,44 @@ class ConwayBase():
         if frame == 0:
             return self._img,
 
-        self._img.set_data(self._prepare_next_board())
+        self._img.set_data(self.prepare_next_board(1 if self._fowarded else self._steps))
+        self._fowarded = True
         return self._img,
 
-    def _get_real_board(self):
+    def get_real_board(self):
         """Retrieves the real board as a NumPy array (without any extras added)."""
 
-        return self._board[1:(self._n + 1), 1:(self._n + 1)]        
+        return self.board[1:(self._n + 1), 1:(self._n + 1)]        
 
-    def _create_buffers(self):
+    def create_buffers(self):
         """This method should create necessary buffers to be used by the prepare_next_board method."""
 
-        self._board = np.pad(self._board, 1, 'constant')
-        self._next_board = np.empty(self._board.shape, self._board.dtype)
+        self.board = np.pad(self.board, 1, 'constant')
+        self._next_board = np.empty(self.board.shape, self.board.dtype)
 
-    def _prepare_next_board(self):
+    def prepare_next_board(self, steps):
         """
         Prepares the padded board in-place to reflect the next generation of cells. 
         This method is supposed to be overridden by child classes together with create_buffers.
         """
 
-        self._next_board[:, :] = self._board
-        for i in range(1, self._n + 1):
-            for j in range(1, self._n + 1):
-                num_live_neighbors = self._board[i, j - 1] + self._board[i, j + 1] + \
-                                     self._board[i - 1, j] + self._board[i + 1, j] + \
-                                     self._board[i - 1, j - 1] + self._board[i - 1, j + 1] + \
-                                     self._board[i + 1, j - 1] + self._board[i + 1, j + 1]
+        for _ in range(steps):
+            self._next_board[:, :] = self.board
+            for i in range(1, self._n + 1):
+                for j in range(1, self._n + 1):
+                    num_live_neighbors = self.board[i, j - 1] + self.board[i, j + 1] + \
+                                         self.board[i - 1, j] + self.board[i + 1, j] + \
+                                         self.board[i - 1, j - 1] + self.board[i - 1, j + 1] + \
+                                         self.board[i + 1, j - 1] + self.board[i + 1, j + 1]
 
-                if self._board[i, j] == Cell.LIVE:
-                    if num_live_neighbors < 2 or num_live_neighbors > 3:
-                        self._next_board[i, j] = Cell.DEAD
-                else:
-                    if num_live_neighbors == 3:
-                        self._next_board[i, j] = Cell.LIVE
-        self._board[:, :] = self._next_board
-        return self._get_real_board()
+                    if self.board[i, j] == Cell.LIVE:
+                        if num_live_neighbors < 2 or num_live_neighbors > 3:
+                            self._next_board[i, j] = Cell.DEAD
+                    else:
+                        if num_live_neighbors == 3:
+                            self._next_board[i, j] = Cell.LIVE
+            self.board[:, :] = self._next_board
+        return self.get_real_board()
 
     @staticmethod
     def parse_command_line_args():
@@ -150,7 +156,16 @@ class ConwayBase():
             metavar='N',
             default=200,
             help='The refresh interval (speed of simulation) in milliseconds.')
+        parser.add_argument(
+            '--forward', 
+            type=int,
+            dest='steps',
+            metavar='N',
+            default=1,
+            help='Number of steps to fast forward the initial configuration.')
+
         return parser.parse_args()
+
 
 if __name__ == '__main__':
     game = ConwayBase(ConwayBase.parse_command_line_args())
