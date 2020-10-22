@@ -1,0 +1,56 @@
+digraph class_schedule_greedy {
+    subgraph cluster_term1 {
+        label="term 1";
+        graph[style=dotted];
+        s1 [label="18.01", style=filled, fillcolor=red, shape=box];
+        s2 [label="8.01"];
+        s3 [label="6.001"];
+    }
+
+    subgraph cluster_term2 {
+        label="term 2";
+        graph[style=dotted];
+        s4 [label="18.02", style=filled, fillcolor=lemonchiffon];
+        s5 [label="18.03", style=filled, fillcolor=red, shape=box];
+        s6 [label="6.042", style=filled, fillcolor=lemonchiffon];
+        s7 [label="8.02"];
+        s8 [label="6.034", style=filled, fillcolor=lemonchiffon];
+    }
+
+    subgraph cluster_term3 {
+        label="term 3";
+        graph[style=dotted];
+        s9 [label="6.002", style=filled, fillcolor=red, shape=box];
+        sA [label="6.046", style=filled, fillcolor=lemonchiffon];
+    }
+
+    subgraph cluster_term4 {
+        label="term 4";
+        graph[style=dotted];
+        sB [label="6.003", style=filled, fillcolor=lemonchiffon];
+        sC [label="6.004", style=filled, fillcolor=red, shape=box];
+        sD [label="6.840", style=filled, fillcolor=lemonchiffon];
+    }
+
+    subgraph cluster_term5 {
+        label="term 5";
+        graph[style=dotted];
+        sE [label="6.033", style=filled, fillcolor=red, shape=box];
+    }
+
+    subgraph cluster_term6 {
+        label="term 6";
+        graph[style=dotted];
+        sF [label="6.857", style=filled, fillcolor=red, shape=box];
+    }
+
+    s1 -> {s4 s5 s6};
+    s2 -> s7;
+    s3 -> {s8 sB sC};
+    s5 -> s9;
+    s6 -> sA;
+    s7 -> s9;
+    s9 -> {sB sC};
+    sA -> sD;
+    sC -> sE -> sF;
+}
