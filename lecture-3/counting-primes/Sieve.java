@@ -1,24 +1,37 @@
 import java.util.BitSet;
 
-public class Sieve {
-    private static final int DEFAULT_UPPER_BOUND = 8000000;
+public class Sieve implements PrimeFinder {
+    private static final int DEFAULT_UPPER_BOUND = 8_000_000;
 
     private final BitSet sieve;
     private final int upperBound;
+    private final int right;
 
     public Sieve(int n) {
+        if (n < 3)
+            throw new IllegalArgumentException("The search interval is [3, n].");
+        right = n;
+        if ((n & 1) == 1)
+            n++;
         sieve = new BitSet(n);
         sieve.set(2, n);
         upperBound = (int) Math.ceil(Math.sqrt(n));
         findPrimes();
     }
 
-    public void printPrimes() {
-        System.out.println(sieve.toString());
+    @Override
+    public String printPrimes() {
+        return sieve.toString();
     }
 
+    @Override
     public int getNumberOfPrimes() {
         return sieve.cardinality();
+    }
+
+    @Override
+    public int getRightEnd() {
+        return right;
     }
 
     private void findPrimes() {
@@ -34,7 +47,7 @@ public class Sieve {
         if (args.length == 1)
             size = Integer.parseInt(args[0]); // Assume size is >= 2.
 
-        Sieve sieve = new Sieve(size);
+        PrimeFinder sieve = new Sieve(size);
         System.out.println("Number of primes = " + sieve.getNumberOfPrimes());
 
         if (size <= 100)
